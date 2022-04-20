@@ -3,7 +3,7 @@ import { ProjectListScreen } from './screen/project-list';
 
 function App() {
   return (
-    <div >
+    <div>
     <ProjectListScreen></ProjectListScreen>
     </div>
   );
