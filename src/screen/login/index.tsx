@@ -1,17 +1,8 @@
-const apiUrl = process.env.REACT_APP_API_URL
 
 export const Login =() => {
 
   const login = (param:{username: string,password: string}) => {
-    fetch(`${apiUrl}/login`,{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(param)
-    }).then(async(response) => {
 
-    })
   }
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {  
