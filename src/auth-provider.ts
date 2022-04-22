@@ -1,6 +1,6 @@
 const localStorageKey = '__auth_provider_token__'
 
-interface User {
+export interface User {
   id: string,
   name: string,
   email: string,
@@ -19,7 +19,7 @@ export const handleUserResponse = ({user}: {user:User}) => {
 }
 
 export const login = (data: {username: string,password:string})=>{
-  fetch(`${apiUrl}/login`,{
+  return fetch(`${apiUrl}/login`,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -28,13 +28,15 @@ export const login = (data: {username: string,password:string})=>{
   }).then(async(response) => {
     if(response.ok) {
       return handleUserResponse(await response.json())
+    } else {
+      return Promise.reject(data)
     }
   })
 }
 
 
 export const register = (data: {username: string,password:string})=>{
-  fetch(`${apiUrl}/register`,{
+  return fetch(`${apiUrl}/register`,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -43,8 +45,10 @@ export const register = (data: {username: string,password:string})=>{
   }).then(async(response) => {
     if(response.ok) {
       return handleUserResponse(await response.json())
+    }else {
+      return Promise.reject(data)
     }
   })
 }
 
-export const logout = () => window.localStorage.removeItem(localStorageKey)
+export const logout = async () => window.localStorage.removeItem(localStorageKey)
