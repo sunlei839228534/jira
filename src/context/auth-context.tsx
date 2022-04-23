@@ -1,5 +1,6 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import * as auth from "../auth-provider"
+import { http } from '../utils/http'
 
 const AuthContext = React.createContext<{
   user: auth.User | null,
@@ -13,6 +14,16 @@ interface AuthForm {
   password: string
 }
 
+export const bootStrapUser = async () => {
+  let user = null
+  let token = auth.getToken()
+  if(token) {
+    const data  = await http('me',{token})
+    user = data.user
+  }
+  return user
+}
+
 export const AuthProvider = ({children}: {children: ReactNode}) => {
   const [user,setUser] = useState<auth.User | null>(null)
 
@@ -24,6 +35,10 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     return auth.register(form).then(setUser)
   }
   const logout = () =>  auth.logout().then(() => setUser(null)) 
+
+  useEffect(() => {
+    bootStrapUser().then(setUser)
+  },[])
 
   return <AuthContext.Provider children={children} value={{user,login,register,logout}}></AuthContext.Provider>
 }

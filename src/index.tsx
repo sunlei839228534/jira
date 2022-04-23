@@ -12,8 +12,7 @@ loadDevTools(() => {
   ).render((
     <React.StrictMode>
       <AppProviders>
-      <App />
-
+        <App />
       </AppProviders>
     </React.StrictMode>
   ))

@@ -3,11 +3,14 @@ import { List }from './list'
 import { useState , useEffect } from 'react'
 import * as qs from 'qs'
 import { cleanObject, useDebounce } from '../../utils'
+import { useHttp } from '../../utils/http'
+import { useAuth } from '../../context/auth-context'
 
 const apiUrl = process.env.REACT_APP_API_URL
 
 export const ProjectListScreen = () => {
   const [users, setUsers] = useState([])
+  const { logout}  = useAuth()
 
   const [ param,setParam ] = useState({
     name: '',
@@ -16,20 +19,17 @@ export const ProjectListScreen = () => {
 
   const debouncedParam = useDebounce(param,2000)
   const [list,setList ] = useState([])
+  const client = useHttp()
 
   useEffect(() => {
-    fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`).then(async (response) => {
-      setList(await response.json())
-    })
-
+    client('projects', { data: cleanObject(debouncedParam)}).then(setList)
   }, [debouncedParam])
 
   useEffect(() => {
-    fetch(`${apiUrl}/users`).then(async (response) => {
-      setUsers(await response.json())
-    })
+    client('users').then(setUsers)
   }, [])
   return <div>
+    <button onClick={logout}>登出</button>
     <SearchPanel users={users} param={param} setParam={setParam}></SearchPanel>
     <List users={users} list={list}></List>
   </div>
