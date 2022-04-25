@@ -1,4 +1,10 @@
-export const List = ({users, list}) => {
+
+interface ListProps {
+  list: Project[],
+  useres: User[]
+}
+
+export const List = ({users, list}: ListProps) => {
   return <table>
     <thead>
       <tr>
