@@ -1,9 +1,10 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import * as auth from "../auth-provider"
+import { User } from '../screen/project-list/search-panel'
 import { http } from '../utils/http'
 
 const AuthContext = React.createContext<{
-  user: auth.User | null,
+  user: User | null,
   register: (form:AuthForm) => Promise<void>,
   login: (form:AuthForm) => Promise<void>,
   logout: () => Promise<void>
@@ -25,7 +26,7 @@ export const bootStrapUser = async () => {
 }
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
-  const [user,setUser] = useState<auth.User | null>(null)
+  const [user,setUser] = useState<User | null>(null)
 
   const login = (form: AuthForm) => {
     return auth.login(form).then(setUser)
