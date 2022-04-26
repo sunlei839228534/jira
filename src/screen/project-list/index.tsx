@@ -27,7 +27,6 @@ export const ProjectListScreen = () => {
     client('users').then(setUsers)
   }, [])
   return <div>
-    <button onClick={logout}>登出</button>
     <SearchPanel users={users} param={param} setParam={setParam}></SearchPanel>
     <List users={users} list={list}></List>
   </div>
