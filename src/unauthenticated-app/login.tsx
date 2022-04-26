@@ -1,4 +1,5 @@
 import { Button, Form ,Input } from "antd"
+import { LongButton } from "."
 import { useAuth } from "../context/auth-context"
 
 
@@ -16,6 +17,6 @@ export const LoginScreen =() => {
     <Form.Item name="password" rules={[{required:true,message: '请输入密码'}]}>
     <Input placeholder="请输入密码" id={'password'} type="password"></Input>
     </Form.Item>
-    <Button htmlType={"submit"} type="primary" >登录</Button>
+    <LongButton htmlType={"submit"} type="primary" >登录</LongButton>
   </Form>
 }
