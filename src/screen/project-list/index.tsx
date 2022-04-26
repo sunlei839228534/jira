@@ -16,7 +16,7 @@ export const ProjectListScreen = () => {
     personId: ''
   })
 
-  const debouncedParam = useDebounce(param,2000)
+  const debouncedParam = useDebounce<typeof param>(param,2000)
   const [list,setList ] = useState([])
   const client = useHttp()
 

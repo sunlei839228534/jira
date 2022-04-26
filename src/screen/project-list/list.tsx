@@ -17,7 +17,7 @@ interface ListProps {
 }
 
 export const List = ({users, list}:ListProps) => {
-  return <Table pagination={false} dataSource={list} columns={[{
+  return <Table rowKey={'id'} pagination={false} dataSource={list} columns={[{
     title: '名称',
     dataIndex: 'name',
     sorter: (a,b) => a.name.localeCompare(b.name)

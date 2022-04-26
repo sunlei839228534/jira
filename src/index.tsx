@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { loadDevTools } from 'jira-dev-tool'
+import { loadServer,DevTools } from 'jira-dev-tool'
 import "antd/dist/antd.less"
 import { AppProviders } from './context';
 
-loadDevTools(() => {
+loadServer(() => {
   ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
   ).render((
     <React.StrictMode>
       <AppProviders>
+        <DevTools />
         <App />
       </AppProviders>
     </React.StrictMode>
