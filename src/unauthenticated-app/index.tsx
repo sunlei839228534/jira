@@ -9,7 +9,7 @@ import right from '../assets/right.svg'
 
 
 export const UnauthenticatedApp = () => {
-  const [isRegister,setIsRegister ] = useState(false)
+  const [isRegister,setIsRegister] = useState(false)
   return <Container >
     <Header />
     <Background />
