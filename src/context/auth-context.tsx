@@ -1,7 +1,9 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import * as auth from "../auth-provider"
+import { FullPageErrorFallback, FullPageLoading } from '../components/lib'
 import { User } from '../screen/project-list/search-panel'
 import { http } from '../utils/http'
+import { useAsync } from '../utils/use-async'
 
 const AuthContext = React.createContext<{
   user: User | null,
@@ -26,7 +28,7 @@ export const bootStrapUser = async () => {
 }
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
-  const [user,setUser] = useState<User | null>(null)
+  const {run, isLoading,isError,error,isIdle,isSuccess,data:user,setData:setUser } = useAsync<User | null>()
 
   const login = (form: AuthForm) => {
     return auth.login(form).then(setUser)
@@ -38,10 +40,18 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
   const logout = () =>  auth.logout().then(() => setUser(null)) 
 
   useEffect(() => {
-    bootStrapUser().then(setUser)
+    run(bootStrapUser())
   },[])
 
-  return <AuthContext.Provider children={children} value={{user,login,register,logout}}></AuthContext.Provider>
+  if(isIdle || isLoading) {
+     return <FullPageLoading />
+  }
+
+  if(isError) {
+    return <FullPageErrorFallback  error={error} />
+  }
+
+  return  <AuthContext.Provider children={children} value={{user,login,register,logout}}></AuthContext.Provider>
 }
 
 export const useAuth = () => {
