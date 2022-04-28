@@ -2,36 +2,48 @@ import styled from '@emotion/styled'
 import { Row } from './components/lib'
 import { useAuth } from './context/auth-context'
 import { ProjectListScreen } from './screen/project-list'
+import { ProjectScreen } from './screen/project'
 import { ReactComponent as  SoftwareLogo} from './assets/software-logo.svg'
 import { Dropdown, Menu,Button } from 'antd'
+import { Routes,Route ,Navigate} from 'react-router'
 
 export const AuthenticatedApp =() => {
-  const  {logout,user} = useAuth()
   return <Container>
-    <Header between={true} >
-      <HeaderLeft gap={true}>
-        <SoftwareLogo width='18rem' color='rgb(38,132,255)'/>
-        <h2>项目</h2>
-        <h2>用户</h2>
-      </HeaderLeft>
-      <HeaderRight>
-        <Dropdown overlay={<Menu>
-          <Menu.Item key="logout">
-            <Button type='link' onClick={logout}>登出</Button>
-          </Menu.Item>
-        </Menu>}>   
-        <Button type='link' onClick={e => e.stopPropagation()}>
-          Hi, {user?.name}
-        </Button>
-        </Dropdown>
-      </HeaderRight>
-    </Header>
+    <PageHeader></PageHeader>
     <Main>
-      <ProjectListScreen/>
+        <Routes>
+          <Route path="/projects" element={<ProjectListScreen />}></Route>
+          <Route path="/projects/:projectId/*" element={<ProjectScreen/>}></Route>
+          <Route index element={<Navigate to="/projects"></Navigate>}></Route>
+        </Routes>
     </Main>
   </Container>
 }
 
+const PageHeader = () => {
+  const  {logout,user} = useAuth()
+  return (
+    <Header between={true} >
+    <HeaderLeft gap={true}>
+      <SoftwareLogo width='18rem' color='rgb(38,132,255)'/>
+      <h2>项目</h2>
+      <h2>用户</h2>
+    </HeaderLeft>
+    <HeaderRight>
+      <Dropdown overlay={<Menu>
+        <Menu.Item key="logout">
+          <Button type='link' onClick={logout}>登出</Button>
+        </Menu.Item>
+      </Menu>}>   
+      <Button type='link' onClick={e => e.stopPropagation()}>
+        Hi, {user?.name}
+      </Button>
+      </Dropdown>
+    </HeaderRight>
+  </Header>
+  )
+
+}
 
 const Container = styled.div`
   height: 100vh;

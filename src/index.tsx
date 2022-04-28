@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import  {BrowserRouter} from 'react-router-dom'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -7,15 +8,18 @@ import { loadServer,DevTools } from 'jira-dev-tool'
 import "antd/dist/antd.less"
 import { AppProviders } from './context';
 
+
 loadServer(() => {
   ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
   ).render((
     <React.StrictMode>
+      <BrowserRouter>
       <AppProviders>
         <DevTools />
         <App />
       </AppProviders>
+      </BrowserRouter>
     </React.StrictMode>
   ))
 })
