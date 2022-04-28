@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 function isFalsy(value:unknown) {
   return value === 0 ? false : !value
@@ -32,7 +32,7 @@ export function useDebounce<T>(value:T, delay:number) {
 
 
 export function useDoucumentTitle (title :string,keepOnUnmount:boolean = true) {
-  const oldTitle =document.title
+  const oldTitle = useRef(document.title).current
 
   useEffect(() => {
     document.title = title
@@ -44,5 +44,5 @@ export function useDoucumentTitle (title :string,keepOnUnmount:boolean = true) {
         document.title = oldTitle
       }
     }
-  },[])
+  },[oldTitle,keepOnUnmount])
 }
