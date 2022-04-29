@@ -16,7 +16,7 @@ interface SearchPanelProps {
   users: User[],
   param: {
     name: string,
-    personId: string
+    personId: string,
   },
   setParam: (param: SearchPanelProps['param']) => void
 }

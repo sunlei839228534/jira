@@ -6,13 +6,13 @@ import styled from '@emotion/styled'
 import { useProjects } from '../../utils/use-project'
 import { useUser } from '../../utils/use-user'
 import { Typography } from 'antd'
+import { useUrlQueryParam } from '../../utils/url'
 
 
 export const ProjectListScreen = () => {
-  const [ param,setParam ] = useState({
-    name: '',
-    personId: ''
-  })
+
+  const [param, setParam] = useUrlQueryParam(['name','personId'])
+  console.log(param)
 
   useDoucumentTitle('项目列表',false)
 

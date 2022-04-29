@@ -46,3 +46,7 @@ export function useDoucumentTitle (title :string,keepOnUnmount:boolean = true) {
     }
   },[oldTitle,keepOnUnmount])
 }
+
+export function resetHref() {
+  return window.location.href = window.location.origin
+} 
