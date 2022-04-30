@@ -1,19 +1,15 @@
 import { SearchPanel  } from './search-panel'
 import { List }from './list'
-import { useState  } from 'react'
 import { useDebounce, useDoucumentTitle } from '../../utils'
 import styled from '@emotion/styled'
 import { useProjects } from '../../utils/use-project'
 import { useUser } from '../../utils/use-user'
 import { Typography } from 'antd'
-import { useUrlQueryParam } from '../../utils/url'
+import { useProjectSearchParams } from './util'
 
 
 export const ProjectListScreen = () => {
-
-  const [param, setParam] = useUrlQueryParam(['name','personId'])
-  console.log(param)
-
+  const [param,setParam] = useProjectSearchParams()
   useDoucumentTitle('项目列表',false)
 
   const debouncedParam = useDebounce<typeof param>(param,2000)
