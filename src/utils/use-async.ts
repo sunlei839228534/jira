@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useMountedRef } from "."
 
 interface State<D> {
@@ -27,30 +27,30 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
   const [ retry , setRetry ] = useState(() => () => {})
   const mountedRef = useMountedRef()
 
-  const setData = (data:D) => {
+  const setData = useCallback((data:D) => {
     setState({
       stat: 'success',
       data,
       error: null
     })
-  }
+  },[])
 
-  const setError = (error: Error) => {
+  const setError = useCallback((error: Error) => {
     setState({
       stat: 'error',
       data: null,
       error
     })
-  }
-  const setLoading = () => {
+  },[]) 
+  const setLoading = useCallback(() => {
     setState({
       stat: 'loading',
       data: null,
       error: null
     })
-  }
+  },[])
 
-  const run = (promise: Promise<D>,runConfig?:{retry: () => Promise<D> }) => {
+  const run = useCallback((promise: Promise<D>,runConfig?:{retry: () => Promise<D> }) => {
     if(!promise || !promise.then) {
       throw new Error('请传入promise')
     }
@@ -74,7 +74,7 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
     }).finally(() => {
 
     })
-  }
+  }, [setData,config.throwOnError,mountedRef,setLoading,setRetry,setError ])
 
   return {
     run,

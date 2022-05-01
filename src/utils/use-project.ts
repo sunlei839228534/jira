@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { cleanObject } from "."
 import { Project } from "../screen/project-list/list"
 import { useHttp } from "./http"
@@ -9,13 +9,13 @@ export const useProjects = (param?: Partial<Project>) => {
 
   const client = useHttp()
 
-  const fetchProjects = () => client('projects', { data: cleanObject(param || {})})
+  const fetchProjects = useCallback(() => client('projects', { data: cleanObject(param || {})}),[client,param]) 
 
   useEffect(() => {
     run(fetchProjects() , {
       retry: fetchProjects
     })
-  },[param])
+  },[param,run,fetchProjects])
 
   return result
 }
