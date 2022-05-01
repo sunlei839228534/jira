@@ -22,6 +22,8 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
     ...defaultInitialState,
     ...initialState
   })
+  //useState直接传入函数的含义是惰性初始化,所以在页面首次渲染后,就会被执行 用useState保存函数 不能直接传入函数
+  const [ retry , setRetry ] = useState(() => () => {})
 
   const setData = (data:D) => {
     setState({
@@ -46,10 +48,15 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
     })
   }
 
-  const run = (promise: Promise<D>) => {
+  const run = (promise: Promise<D>,runConfig?:{retry: () => Promise<D> }) => {
     if(!promise || !promise.then) {
       throw new Error('请传入promise')
     }
+    setRetry(() => () => {
+      if(runConfig?.retry) {
+        run(runConfig?.retry(), runConfig)
+      }
+    })
     setLoading()
     return promise.then(res => {
       setData(res)
@@ -61,6 +68,7 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
       }
       return error
     }).finally(() => {
+
     })
   }
 
@@ -72,6 +80,8 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
     isError: state.stat === 'error',
     setData,
     setError,
+    //retry被调用时 重新跑一次run
+    retry,
     ...state
   }
 }
