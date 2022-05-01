@@ -50,3 +50,16 @@ export function useDoucumentTitle (title :string,keepOnUnmount:boolean = true) {
 export function resetHref() {
   return window.location.href = window.location.origin
 } 
+
+export function useMountedRef () {
+  const mountedRef  = useRef(false)
+
+  useEffect(() => {
+    mountedRef.current = true 
+    return () => {
+      mountedRef.current = false
+    }
+  })
+
+  return mountedRef
+}
