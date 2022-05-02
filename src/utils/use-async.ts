@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useReducer, useState } from "react"
 import { useMountedRef } from "."
 
 interface State<D> {
@@ -17,18 +17,25 @@ const defaultConfig = {
   throwOnError: false
 }
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => { 
+  const mountedRef= useMountedRef()
+  return useCallback((...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0), [dispatch,mountedRef])
+}
+
+
+
 export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defaultConfig) => {
   const config = {...defaultConfig,...initialConfig}
-  const [ state, setState ] = useState({
+  const [ state, dispatch ] = useReducer((state:State<D>,action:Partial<State<D>>) => ({...state,...action}) ,{
     ...defaultInitialState,
     ...initialState
   })
   //useState直接传入函数的含义是惰性初始化,所以在页面首次渲染后,就会被执行 用useState保存函数 不能直接传入函数
   const [ retry , setRetry ] = useState(() => () => {})
-  const mountedRef = useMountedRef()
+  const safeDispatch = useSafeDispatch(dispatch)
 
   const setData = useCallback((data:D) => {
-    setState({
+    safeDispatch({
       stat: 'success',
       data,
       error: null
@@ -36,14 +43,14 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
   },[])
 
   const setError = useCallback((error: Error) => {
-    setState({
+    safeDispatch({
       stat: 'error',
       data: null,
       error
     })
   },[]) 
   const setLoading = useCallback(() => {
-    setState({
+    safeDispatch({
       stat: 'loading',
       data: null,
       error: null
@@ -61,9 +68,7 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
     })
     setLoading()
     return promise.then(res => {
-      if(mountedRef.current) {
         setData(res)
-      }
       return res
     }).catch(error => {
       setError(error)
@@ -74,7 +79,7 @@ export const useAsync = <D>(initialState?: State<D>,initialConfig?: typeof defau
     }).finally(() => {
 
     })
-  }, [setData,config.throwOnError,mountedRef,setLoading,setRetry,setError ])
+  }, [setData,config.throwOnError,setLoading,setRetry,setError ])
 
   return {
     run,
