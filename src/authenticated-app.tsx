@@ -7,34 +7,34 @@ import { ReactComponent as  SoftwareLogo} from './assets/software-logo.svg'
 import { Dropdown, Menu,Button } from 'antd'
 import { Routes,Route ,Navigate} from 'react-router'
 import { resetHref } from './utils'
-import { useState } from 'react'
 import { ProjectPopover } from './components/project-popover'
 import { ProjectModal } from './screen/project-list/project-modal'
+import { useDispatch} from 'react-redux'
+import { projectListSlice } from './utils/project-list-slice'
 
 export const AuthenticatedApp =() => {
-  const [projectModalOpen , setProjectModalOpen]  = useState(false)
 
   return <Container>
-    <PageHeader ProjectModalButton={<ButtonNoPadding onClick={() => setProjectModalOpen(true)} type="link">创建项目</ButtonNoPadding>}></PageHeader>
+    <PageHeader></PageHeader>
     <Main>
         <Routes>
-          <Route path="/projects" element={<ProjectListScreen  ProjectModalButton={<ButtonNoPadding onClick={() => setProjectModalOpen(true)} type="link">创建项目</ButtonNoPadding>} />}></Route>
+          <Route path="/projects" element={<ProjectListScreen />}></Route>
           <Route path="/projects/:projectId/*" element={<ProjectScreen/>}></Route>
           <Route index element={<Navigate to="/projects"></Navigate>}></Route>
         </Routes>
     </Main>
-    <ProjectModal projectModalOpen={projectModalOpen} onClose={() => setProjectModalOpen(false)}></ProjectModal>
+    <ProjectModal></ProjectModal>
   </Container>
 }
 
 
 
-const PageHeader = (props: {ProjectModalButton: JSX.Element}) => {
+const PageHeader = () => {
   return (
     <Header between={true} >
     <HeaderLeft gap={true}>
       <ButtonNoPadding  type="text"><SoftwareLogo onClick={resetHref} width='18rem' color='rgb(38,132,255)'/></ButtonNoPadding>
-      <ProjectPopover ProjectModalButton={props.ProjectModalButton}></ProjectPopover>
+      <ProjectPopover ></ProjectPopover>
       <span>用户</span>
     </HeaderLeft>
     <HeaderRight>
