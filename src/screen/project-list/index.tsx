@@ -9,7 +9,7 @@ import { useProjectSearchParams } from './util'
 import { Row } from '../../components/lib'
 
 
-export const ProjectListScreen = ({setProjectModalOpen}: {setProjectModalOpen: (isOpen:boolean) => void}) => {
+export const ProjectListScreen = ({ProjectModalButton}: {ProjectModalButton: JSX.Element}) => {
   const [param,setParam] = useProjectSearchParams()
   useDoucumentTitle('项目列表',false)
 
@@ -20,12 +20,12 @@ export const ProjectListScreen = ({setProjectModalOpen}: {setProjectModalOpen: (
   return <Container>
     <Row between={true}>
     <h1>项目列表</h1>
-      <Button onClick={() => setProjectModalOpen(true)} >创建项目</Button>
+      {ProjectModalButton}
     </Row>
       
     <SearchPanel users={users || []} param={param} setParam={setParam}></SearchPanel>
     {error ? <Typography.Text type="danger" >{error.message}</Typography.Text> : null}
-    <List setProjectModalOpen={setProjectModalOpen} refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}></List>
+    <List ProjectModalButton={ProjectModalButton} refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}></List>
   </Container>
 }
 
