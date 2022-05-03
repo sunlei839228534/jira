@@ -1,8 +1,10 @@
 import {configureStore } from '@reduxjs/toolkit'
 import { projectListSlice } from '../utils/project-list-slice'
+import { authSlice } from './auth.slice'
 
 export const rootReducer = {
-  projectList: projectListSlice.reducer
+  projectList: projectListSlice.reducer,
+  auth: authSlice.reducer
 }
 
 export const store = configureStore({
