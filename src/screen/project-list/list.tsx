@@ -21,14 +21,16 @@ interface ListProps extends TableProps<Project>  {
 }
 
 export const List = ({users,...result}:ListProps) => {
-  const {mutate} = useEditProject()
-  const { open } = useProjectModal()
+  const { mutate } = useEditProject()
+  const { startEdit } = useProjectModal()
+
+  const editProject = (id:number) => () => startEdit(id)
 
   return <Table rowKey={'id'} pagination={false}  columns={[
     {
       title: <Pin checked={true} disabled={true} />,
       render(value,project) {
-        return <Pin checked={project.pin} ></Pin>
+        return <Pin checked={project.pin} onCheckedChange={() => {mutate({...project, pin: !project.pin})}} ></Pin>
       }
     },{
     title: '名称',
@@ -55,9 +57,8 @@ export const List = ({users,...result}:ListProps) => {
     render(value,project) {
       return <Dropdown overlay={
         <Menu key="edit">
-          <Menu.Item>
-          <ButtonNoPadding onClick={open} type="link">编辑</ButtonNoPadding>
-          </Menu.Item>
+          <Menu.Item onClick={editProject(project.id)}  key='edit'>编辑</Menu.Item>
+          <Menu.Item key='delete'>删除</Menu.Item>
         </Menu>
       }>
         <ButtonNoPadding type="link">...</ButtonNoPadding>
