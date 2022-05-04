@@ -18,19 +18,17 @@ export interface Project {
 
 interface ListProps extends TableProps<Project>  {
   users: User[],
-  refresh?: () => void,
 }
 
-export const List = ({users,refresh,...result}:ListProps) => {
+export const List = ({users,...result}:ListProps) => {
   const {mutate} = useEditProject()
-  const pinProject = (id: number) => (pin:boolean) => mutate({id,pin}).then(refresh)
   const { open } = useProjectModal()
 
   return <Table rowKey={'id'} pagination={false}  columns={[
     {
       title: <Pin checked={true} disabled={true} />,
       render(value,project) {
-        return <Pin checked={project.pin} onCheckedChange={pinProject(project.id)}></Pin>
+        return <Pin checked={project.pin} ></Pin>
       }
     },{
     title: '名称',

@@ -6,7 +6,7 @@ import { useProjects } from '../../utils/use-project'
 import { useUser } from '../../utils/use-user'
 import { Button, Typography } from 'antd'
 import { useProjectModal, useProjectSearchParams } from './util'
-import { Row ,ButtonNoPadding } from '../../components/lib'
+import { Row ,ButtonNoPadding,ErrorBox } from '../../components/lib'
 
 
 export const ProjectListScreen = () => {
@@ -15,7 +15,7 @@ export const ProjectListScreen = () => {
   useDoucumentTitle('项目列表',false)
 
   const debouncedParam = useDebounce<typeof param>(param,2000)
-  const {data:list,isLoading ,error ,retry} = useProjects(debouncedParam)
+  const {data:list,isLoading ,error} = useProjects(debouncedParam)
   const { data: users} = useUser()
 
   return <Container>
@@ -25,8 +25,8 @@ export const ProjectListScreen = () => {
     </Row>
       
     <SearchPanel users={users || []} param={param} setParam={setParam}></SearchPanel>
-    {error ? <Typography.Text type="danger" >{error.message}</Typography.Text> : null}
-    <List  refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}></List>
+    <ErrorBox error={error}></ErrorBox>
+    <List   loading={isLoading} users={users || []} dataSource={list || []}></List>
   </Container>
 }
 
