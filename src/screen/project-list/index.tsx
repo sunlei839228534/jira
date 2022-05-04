@@ -4,7 +4,6 @@ import { useDebounce, useDoucumentTitle } from '../../utils'
 import styled from '@emotion/styled'
 import { useProjects } from '../../utils/use-project'
 import { useUser } from '../../utils/use-user'
-import { Button, Typography } from 'antd'
 import { useProjectModal, useProjectSearchParams } from './util'
 import { Row ,ButtonNoPadding,ErrorBox } from '../../components/lib'
 
