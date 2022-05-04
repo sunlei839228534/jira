@@ -5,12 +5,13 @@ import styled from '@emotion/styled'
 import { useProjects } from '../../utils/use-project'
 import { useUser } from '../../utils/use-user'
 import { Button, Typography } from 'antd'
-import { useProjectSearchParams } from './util'
-import { Row } from '../../components/lib'
+import { useProjectModal, useProjectSearchParams } from './util'
+import { Row ,ButtonNoPadding } from '../../components/lib'
 
 
-export const ProjectListScreen = ({ProjectModalButton}: {ProjectModalButton: JSX.Element}) => {
+export const ProjectListScreen = () => {
   const [param,setParam] = useProjectSearchParams()
+  const { open } = useProjectModal()
   useDoucumentTitle('项目列表',false)
 
   const debouncedParam = useDebounce<typeof param>(param,2000)
@@ -20,12 +21,12 @@ export const ProjectListScreen = ({ProjectModalButton}: {ProjectModalButton: JSX
   return <Container>
     <Row between={true}>
     <h1>项目列表</h1>
-      {ProjectModalButton}
+    <ButtonNoPadding onClick={open} type="link">创建项目</ButtonNoPadding>
     </Row>
       
     <SearchPanel users={users || []} param={param} setParam={setParam}></SearchPanel>
     {error ? <Typography.Text type="danger" >{error.message}</Typography.Text> : null}
-    <List ProjectModalButton={ProjectModalButton} refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}></List>
+    <List  refresh={retry} loading={isLoading} users={users || []} dataSource={list || []}></List>
   </Container>
 }
 

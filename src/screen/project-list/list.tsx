@@ -5,6 +5,7 @@ import { Pin } from "../../components/pin"
 import { useEditProject } from "../../utils/use-project"
 import { User } from "./search-panel"
 import { ButtonNoPadding} from '../../components/lib'
+import { useProjectModal } from "./util"
 
 export interface Project {
   id: number,
@@ -18,12 +19,12 @@ export interface Project {
 interface ListProps extends TableProps<Project>  {
   users: User[],
   refresh?: () => void,
-  ProjectModalButton :JSX.Element
 }
 
-export const List = ({users,refresh,ProjectModalButton,...result}:ListProps) => {
+export const List = ({users,refresh,...result}:ListProps) => {
   const {mutate} = useEditProject()
   const pinProject = (id: number) => (pin:boolean) => mutate({id,pin}).then(refresh)
+  const { open } = useProjectModal()
 
   return <Table rowKey={'id'} pagination={false}  columns={[
     {
@@ -57,7 +58,7 @@ export const List = ({users,refresh,ProjectModalButton,...result}:ListProps) => 
       return <Dropdown overlay={
         <Menu key="edit">
           <Menu.Item>
-            {ProjectModalButton}
+          <ButtonNoPadding onClick={open} type="link">编辑</ButtonNoPadding>
           </Menu.Item>
         </Menu>
       }>
