@@ -1,7 +1,8 @@
 import React, { ReactNode, useEffect, useState } from 'react'
+import { useQueryClient } from 'react-query'
 import * as auth from "../auth-provider"
 import { FullPageErrorFallback, FullPageLoading } from '../components/lib'
-import { User } from '../screen/project-list/search-panel'
+import { User } from '../types/user'
 import { http } from '../utils/http'
 import { useAsync } from '../utils/use-async'
 
@@ -29,6 +30,7 @@ export const bootStrapUser = async () => {
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
   const {run, isLoading,isError,error,isIdle,isSuccess,data:user,setData:setUser } = useAsync<User | null>()
+  const queryClient = useQueryClient()
 
   const login = (form: AuthForm) => {
     return auth.login(form).then(setUser)
@@ -37,7 +39,10 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
   const register = (form: AuthForm) => {
     return auth.register(form).then(setUser)
   }
-  const logout = () =>  auth.logout().then(() => setUser(null)) 
+  const logout = () =>  auth.logout().then(() => {
+    setUser(null)
+    queryClient.clear()
+  }) 
 
   useEffect(() => {
     run(bootStrapUser())
