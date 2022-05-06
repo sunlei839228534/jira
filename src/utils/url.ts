@@ -19,3 +19,14 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
   }
  ] as const
 }
+
+export const useSetUrlSearchParam = () => {
+  const [searchParams,setSearchParams] = useSearchParams()
+  return (params: {[key in string] : unknown}) => {
+    const o = cleanObject({
+      ...Object.fromEntries(searchParams),
+      ...params
+    }) as URLSearchParamsInit
+    return setSearchParams(o)
+  }
+}
