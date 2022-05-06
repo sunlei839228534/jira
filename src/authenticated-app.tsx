@@ -60,6 +60,8 @@ const User = () => {
 }
 
 const Container = styled.div`
+  display: grid;
+  grid-template-rows: 6rem 1fr;
   height: 100vh;
 `
 
@@ -75,7 +77,8 @@ const HeaderRight = styled.div`
 `
 
 const Main = styled.main`
- grid-area: main;
+  display:flex;
+  overflow: hidden;
 `
 
 // const PageHeader = styled.header`

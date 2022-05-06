@@ -9,7 +9,7 @@ function App() {
   const { user } = useAuth()
 
   return (
-    <div>
+    <div style={{minHeight: '100vh'}}>
       <ErrorBoundary fallbackRender={FullPageErrorFallback}>
         {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
       </ErrorBoundary>
