@@ -1,13 +1,14 @@
 import styled from "@emotion/styled"
 import { useDoucumentTitle } from "../../utils"
 import { useKanbans } from "../../utils/kanban"
-import { KanbanColumn,Container as KanbanContainer } from "./kanban-column"
+import { KanbanColumn } from "./kanban-column"
 import { useKanbanSearchParams, useProjectInUrl, useTasksSearchParams } from "./util"
 import {SearchPanel } from './search-panel'
 import { ScreenContainer } from "../../components/lib"
 import { useTasks } from "../../utils/task"
 import { Spin } from "antd"
 import { CreateKanban } from "./create-kanban"
+import { TaskModal } from './task-modal'
 
 export const KanbanScreen = () =>{ 
   useDoucumentTitle('看板列表')
@@ -24,8 +25,10 @@ export const KanbanScreen = () =>{
     {
       kanbans?.map(kanban => <KanbanColumn  kanban={kanban} key={kanban.id} />)
     }
-     <CreateKanban />
-    </ColumnsContainer> }
+      <CreateKanban />
+      </ColumnsContainer>
+    }
+    <TaskModal />
   </ScreenContainer>
 }
 
