@@ -1,3 +1,4 @@
+import React from 'react'
 import { Kanban } from '../../types/kanban'
 import { useTasks } from '../../utils/task'
 import { useTaskTypes } from '../../utils/task-types'
@@ -11,6 +12,7 @@ import { Task } from '../../types/task'
 import {Mark } from '../../components/mark'
 import { useDeleteKanban } from '../../utils/kanban'
 import { Row } from '../../components/lib'
+import {  Drag, Drop ,DropChild} from 'components/drag-and-drop'
 
 const TaskTypeIcon = ({id}: {id:number}) => {
   const {data: taskTypes} = useTaskTypes()
@@ -31,24 +33,35 @@ const TaskCard = ({task}: {task: Task}) => {
 </Card>
 }
 
-export const KanbanColumn = ({kanban}: {kanban: Kanban}) => {
+export const KanbanColumn = React.forwardRef<HTMLDivElement, {kanban: Kanban}>(({kanban,...props},ref) => {
   const { data: allTasks } = useTasks(useTasksSearchParams())
   const task = allTasks?.filter((task) => {
     return task.kanbanId === kanban.id
   })
 
-  return <Container>
+  return <Container ref={ref} {...props}>
     <Row between={true}>
       <h3>{kanban.name}</h3>
-      <More kanban={kanban}></More>
+      <More kanban={kanban} key={kanban.id}></More>
     </Row>
-
     <TasksContainer>
-      {task?.map(task =><TaskCard task={task} /> )}
+      <Drop type="ROW" direction="vertical" droppableId={String(kanban.id)}>
+        <DropChild>
+          {
+            task?.map((task,taskIndex) => (
+              <Drag key={task.id} index={taskIndex} draggableId={'task' + task.id}>
+                <div>
+                  <TaskCard key={task.id} task={task}></TaskCard>
+                </div>
+              </Drag>
+            ))
+          }
+        </DropChild>
+      </Drop>
       <CreateTask kanbanId={kanban.id} />
     </TasksContainer>
   </Container>
-}
+})
 
 const More = ({kanban}: {kanban: Kanban}) => {
   const { mutateAsync } = useDeleteKanban(useKanbansQueryKey())
@@ -62,11 +75,10 @@ const More = ({kanban}: {kanban: Kanban}) => {
       }
     })
   }
+  
+  const MenuItems = [{label:<Button type="link" onClick={startEdit}>删除</Button>,key:"delete" }]
 
-  const overlay = <Menu>
-    <Menu.Item>
-      <Button type="link" onClick={startEdit}>删除</Button>
-    </Menu.Item>
+  const overlay = <Menu items={MenuItems}>
   </Menu>
 
   return <Dropdown overlay={overlay}>

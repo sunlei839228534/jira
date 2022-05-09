@@ -5,7 +5,7 @@ import { ButtonNoPadding } from '../components/lib'
 import { useProjectModal } from "../screen/project-list/util"
 
 export const ProjectPopover = () => {
-  const {data:projects,isLoading } = useProjects()
+  const {data: projects } = useProjects()
   const { projectModalOpen ,open } = useProjectModal()
   
   const pinProjects = projects?.filter(project => project.pin)
